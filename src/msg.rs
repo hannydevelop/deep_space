@@ -2,9 +2,8 @@ use crate::address::Address;
 use crate::canonical_json::to_canonical_json;
 use crate::coin::Coin;
 use failure::Error;
-use serde::Serialize;
 use rust_decimal::Decimal;
-
+use serde::Serialize;
 
 #[derive(Serialize, Debug, Clone)]
 pub struct SendMsg {
@@ -19,25 +18,25 @@ pub struct MsgExchangeRateVote {
     pub salt: String,
     pub denom: String,
     pub feeder: Address,
-    pub validator:Address,
+    pub validator: Address,
 }
 
-impl MsgExchangeRateVote{
-    fn generate_prevote_hash(&self) -> String{
-       unimplemented!() 
+impl MsgExchangeRateVote {
+    fn generate_prevote_hash(&self) -> String {
+        unimplemented!()
     }
 }
 
 #[derive(Serialize, Debug, Clone)]
 pub struct MsgExchangeRatePrevote {
-    pub hash:String,
+    pub hash: String,
     pub denom: String,
     pub feeder: Address,
-    pub validator:Address,
+    pub validator: Address,
 }
 
 #[derive(Serialize, Debug, Clone)]
-pub struct MsgDelegate{
+pub struct MsgDelegate {
     pub operator: Address,
     pub feeder: Address,
 }
@@ -61,7 +60,7 @@ impl Msg {
 #[cfg(test)]
 mod tests {
     use super::Msg;
-    use serde_json::{from_str, to_string, Value,json};
+    use serde_json::{from_str, json, to_string, Value};
     #[test]
     fn test_serialize_msg() {
         let msg: Msg = Msg::Test("TestMsg1".to_string());

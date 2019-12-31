@@ -1,8 +1,8 @@
-use subtle_encoding::bech32::{self};
-use failure::{Error,ensure};
+use failure::{ensure, Error};
 use serde::Serialize;
 use serde::Serializer;
 use std::fmt::Write;
+use subtle_encoding::bech32::{self};
 
 /// An address that's derived from a given PublicKey
 #[derive(Default, Debug, PartialEq, Eq, Copy, Clone)]
