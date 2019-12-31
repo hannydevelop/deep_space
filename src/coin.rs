@@ -1,4 +1,5 @@
 use num256::Uint256;
+use serde::Serialize;
 
 /// Coin holds some amount of one currency
 #[derive(Serialize, Debug, Default, Clone)]

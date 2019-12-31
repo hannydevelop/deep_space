@@ -1,5 +1,6 @@
 use crate::coin::Coin;
 use num256::Uint256;
+use serde::Serialize;
 
 /// StdFee includes the amount of coins paid in fees and the maximum
 /// gas to be used by the transaction. The ratio yields an effective "gasprice",

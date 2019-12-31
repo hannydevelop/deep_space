@@ -1,5 +1,5 @@
-use bech32::{Bech32, FromBase32, ToBase32};
-use failure::Error;
+use subtle_encoding::bech32::{self};
+use failure::{Error,ensure};
 use serde::Serialize;
 use serde::Serializer;
 use std::fmt::Write;
@@ -25,7 +25,7 @@ impl Address {
     /// * `hrp` - A prefix for bech32 encoding. The convention for addresses
     /// in Cosmos is `cosmos`.
     pub fn to_bech32<T: Into<String>>(&self, hrp: T) -> Result<String, Error> {
-        let bech32 = Bech32::new(hrp.into(), self.0.to_base32())?;
+        let bech32 = bech32::encode(&hrp.into(), self.0);
         Ok(bech32.to_string())
     }
 
@@ -33,11 +33,10 @@ impl Address {
     ///
     /// * `s` - A bech32 encoded address
     pub fn from_bech32(s: String) -> Result<Address, Error> {
-        let bech32: Bech32 = s.parse()?;
-        let vec: Vec<u8> = FromBase32::from_base32(bech32.data())?;
+        let (_hrp, data) = bech32::decode(&s)?;
         let mut addr = [0u8; 20];
-        ensure!(vec.len() == 20, "Wrong size of decoded bech32 data");
-        addr.copy_from_slice(&vec);
+        ensure!(data.len() == 20, "Wrong size of decoded bech32 data");
+        addr.copy_from_slice(&data);
         Ok(Address(addr))
     }
 }

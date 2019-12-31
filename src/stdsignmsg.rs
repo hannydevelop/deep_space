@@ -3,6 +3,7 @@ use crate::msg::Msg;
 use crate::stdfee::StdFee;
 use crate::stdsigndoc::RawMessage;
 use crate::stdsigndoc::StdSignDoc;
+use serde::Serialize;
 use failure::Error;
 
 /// This denotes a payload that should be signed.

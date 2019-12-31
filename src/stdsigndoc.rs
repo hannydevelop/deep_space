@@ -1,6 +1,7 @@
 use crate::canonical_json::{canonical_json_serialize, to_canonical_json};
 use crate::stdfee::StdFee;
 use failure::Error;
+use serde::Serialize;
 
 /// A raw message that gets serialized as a JSON
 #[derive(Serialize, Debug)]
