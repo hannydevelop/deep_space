@@ -1,3 +1,5 @@
+//! Convience methods for signing transactions
+//!
 use crate::canonical_json::{canonical_json_serialize, to_canonical_json};
 use crate::stdfee::StdFee;
 use failure::Error;
@@ -12,12 +14,17 @@ pub struct RawMessage(#[serde(serialize_with = "canonical_json_serialize")] pub 
 /// preparation of a payload for a signing process.
 #[derive(Serialize, Debug, Default)]
 pub struct StdSignDoc {
+    /// Identifies the Chain-Id for which this transaction is valid
     pub chain_id: String,
+    /// Account numer for the account on this chain
     pub account_number: String,
+    /// Sequence number for this transaction
     pub sequence: String,
+    /// Fees to be paid the validator set
     pub fee: StdFee,
-
+    /// Msgs contained
     pub msgs: Vec<RawMessage>,
+    /// Memo field
     pub memo: String,
 }
 

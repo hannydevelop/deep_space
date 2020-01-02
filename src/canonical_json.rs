@@ -1,3 +1,6 @@
+//! Serialize JSOn canonicalized using the Cosmos format.
+//!
+
 use serde::Serialize;
 ///! Naive implementation of canonical JSON
 use serde::Serializer;

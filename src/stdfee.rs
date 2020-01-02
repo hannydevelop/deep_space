@@ -1,3 +1,6 @@
+//! Types for Cosmos SDK fees
+//!
+
 use crate::coin::Coin;
 use num256::Uint256;
 use serde::Serialize;
@@ -7,6 +10,8 @@ use serde::Serialize;
 /// which must be above some miminum to be accepted into the mempool.
 #[derive(Serialize, Default, Debug, Clone)]
 pub struct StdFee {
+    /// Fee to be paid
     pub amount: Option<Vec<Coin>>,
+    /// Gas requested for transaction
     pub gas: Uint256,
 }

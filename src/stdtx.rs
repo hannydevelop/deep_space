@@ -1,10 +1,15 @@
+//! Message format for broadcasting transctions
+//!
+
 use crate::msg::Msg;
 use crate::stdfee::StdFee;
 use serde::{Serialize, Serializer};
 use signatory::ecdsa::{curve::Secp256k1, FixedSignature};
 use std::fmt;
 
+/// Signatures on the transactions
 pub enum TxSignature {
+    /// Standard Secp256k1 ECDSA signature
     StandardSDKSignature(FixedSignature<Secp256k1>),
 }
 
@@ -34,8 +39,12 @@ impl Serialize for TxSignature {
 /// An enum that bundles the signed transaction with signatures.
 #[derive(Serialize, Default, Debug)]
 pub struct StdTx {
+    /// Messages in transction
     pub msg: Vec<Msg>,
+    /// Fees to be paid
     pub fee: StdFee,
+    /// Memo field
     pub memo: String,
+    /// Signatures
     pub signatures: Vec<TxSignature>,
 }

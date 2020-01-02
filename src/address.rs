@@ -1,7 +1,10 @@
+//! Cosmos SDK account Addresses
+//!
+
 use failure::{ensure, Error};
 use serde::Serialize;
 use serde::Serializer;
-use std::fmt::Write;
+use std::fmt::{self, Display};
 use subtle_encoding::bech32::{self};
 
 /// An address that's derived from a given PublicKey
@@ -9,15 +12,9 @@ use subtle_encoding::bech32::{self};
 pub struct Address([u8; 20]);
 
 impl Address {
+    /// Create an address from byte array.
     pub fn from_bytes(bytes: [u8; 20]) -> Address {
         Address(bytes)
-    }
-    pub fn to_string(&self) -> String {
-        let mut s = String::new();
-        for &byte in self.0.iter() {
-            write!(&mut s, "{:02X}", byte).expect("Unable to write");
-        }
-        s
     }
 
     /// Obtain a bech32 encoded address with a given prefix.
@@ -25,8 +22,7 @@ impl Address {
     /// * `hrp` - A prefix for bech32 encoding. The convention for addresses
     /// in Cosmos is `cosmos`.
     pub fn to_bech32<T: Into<String>>(&self, hrp: T) -> String {
-        let bech32 = bech32::encode(&hrp.into(), self.0);
-        bech32.to_string()
+        bech32::encode(&hrp.into(), self.0)
     }
 
     /// Parse a bech32 encoded address
@@ -38,6 +34,15 @@ impl Address {
         ensure!(data.len() == 20, "Wrong size of decoded bech32 data");
         addr.copy_from_slice(&data);
         Ok(Address(addr))
+    }
+}
+
+impl Display for Address {
+    fn fmt<'a>(&self, f: &mut fmt::Formatter<'a>) -> fmt::Result {
+        for &byte in self.0.iter() {
+            write!(f, "{:02X}", byte)?;
+        }
+        Ok(())
     }
 }
 

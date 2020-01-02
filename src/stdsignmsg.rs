@@ -1,3 +1,5 @@
+//! Message format for signable messages
+//!
 use crate::canonical_json::to_canonical_json;
 use crate::msg::Msg;
 use crate::stdfee::StdFee;
