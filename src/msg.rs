@@ -4,6 +4,8 @@ use crate::coin::Coin;
 use failure::Error;
 use rust_decimal::Decimal;
 use serde::Serialize;
+use sha2::{digest::Digest, Sha256};
+use subtle_encoding::hex;
 
 #[derive(Serialize, Debug, Clone)]
 pub struct SendMsg {
@@ -22,8 +24,21 @@ pub struct MsgExchangeRateVote {
 }
 
 impl MsgExchangeRateVote {
-    fn generate_prevote_hash(&self) -> String {
-        unimplemented!()
+    /// Generatea hex encoded truncated sha256 of vote. Needed to generate prevote
+    fn generate_vote_hash(&self) -> String {
+        let data = format!(
+            "{}:{}:{}:{}",
+            self.salt,
+            self.exchange_rate,
+            self.denom,
+            self.validator.to_bech32("cosmosvalop")
+        );
+        //Tendermint truncated sha256
+        let digest = Sha256::digest(data.as_bytes());
+        let mut bytes = [0u8; 20];
+        bytes.copy_from_slice(&digest[..20]);
+        // Should always succeed.
+        String::from_utf8(hex::encode(bytes)).unwrap()
     }
 }
 

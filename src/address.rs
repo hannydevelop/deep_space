@@ -24,9 +24,9 @@ impl Address {
     ///
     /// * `hrp` - A prefix for bech32 encoding. The convention for addresses
     /// in Cosmos is `cosmos`.
-    pub fn to_bech32<T: Into<String>>(&self, hrp: T) -> Result<String, Error> {
+    pub fn to_bech32<T: Into<String>>(&self, hrp: T) -> String {
         let bech32 = bech32::encode(&hrp.into(), self.0);
-        Ok(bech32.to_string())
+        bech32.to_string()
     }
 
     /// Parse a bech32 encoded address
@@ -47,9 +47,7 @@ impl Serialize for Address {
         S: Serializer,
     {
         // Serialize address as a string with a default prefix for addresses
-        let s = self
-            .to_bech32("cosmos")
-            .map_err(serde::ser::Error::custom)?;
+        let s = self.to_bech32("cosmos");
         serializer.serialize_str(&s)
     }
 }
@@ -58,7 +56,7 @@ impl Serialize for Address {
 fn test_bech32() {
     let address = Address::default();
     assert_eq!(
-        address.to_bech32("cosmos").unwrap(),
+        address.to_bech32("cosmos"),
         "cosmos1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqnrql8a"
     );
 
