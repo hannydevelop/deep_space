@@ -1,4 +1,4 @@
-Deep Space Rust Cosmos SDK tranaction creation library.
+# Deep Space Rust Cosmos SDK tranaction creation library
 
 This library is intended to enable the creation of Cosmos SDK transaction in JSON and Signable JSON formmat. It is intended
 to enable creation of signing and brodcast services that interact with the Cosmos SDK commandline/ REST server applications..
