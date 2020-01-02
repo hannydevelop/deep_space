@@ -32,8 +32,8 @@ impl Address {
     /// Parse a bech32 encoded address
     ///
     /// * `s` - A bech32 encoded address
-    pub fn from_bech32(s: String) -> Result<Address, Error> {
-        let (_hrp, data) = bech32::decode(&s)?;
+    pub fn from_bech32<S: Into<String>>(s: S) -> Result<Address, Error> {
+        let (_hrp, data) = bech32::decode(s.into())?;
         let mut addr = [0u8; 20];
         ensure!(data.len() == 20, "Wrong size of decoded bech32 data");
         addr.copy_from_slice(&data);

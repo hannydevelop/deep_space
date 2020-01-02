@@ -25,13 +25,13 @@ pub struct MsgExchangeRateVote {
 
 impl MsgExchangeRateVote {
     /// Generatea hex encoded truncated sha256 of vote. Needed to generate prevote
-    fn generate_vote_hash(&self) -> String {
+    pub fn generate_vote_hash(&self) -> String {
         let data = format!(
             "{}:{}:{}:{}",
             self.salt,
             self.exchange_rate,
             self.denom,
-            self.validator.to_bech32("cosmosvalop")
+            self.validator.to_bech32("terravaloper")
         );
         //Tendermint truncated sha256
         let digest = Sha256::digest(data.as_bytes());
@@ -51,7 +51,7 @@ pub struct MsgExchangeRatePrevote {
 }
 
 #[derive(Serialize, Debug, Clone)]
-pub struct MsgDelegate {
+pub struct MsgDelegateFeedConsent {
     pub operator: Address,
     pub feeder: Address,
 }
@@ -62,6 +62,12 @@ pub struct MsgDelegate {
 pub enum Msg {
     #[serde(rename = "cosmos-sdk/MsgSend")]
     SendMsg(SendMsg),
+    #[serde(rename = "oracle/MsgExchangeRateVote")]
+    MsgExchangeRateVote(MsgExchangeRateVote),
+    #[serde(rename = "oracle/MsgExchangeRatePrevote")]
+    MsgExchangeRatePrevote(MsgExchangeRatePrevote),
+    #[serde(rename = "oracle/MsgDelegateFeedConsent")]
+    MsgDelegateFeedConsent(MsgDelegateFeedConsent),
     #[serde(rename = "deep_space/Test")]
     Test(String),
 }
@@ -74,13 +80,31 @@ impl Msg {
 
 #[cfg(test)]
 mod tests {
-    use super::Msg;
+    use super::{Msg, MsgExchangeRateVote, Address};
     use serde_json::{from_str, json, to_string, Value};
+    use rust_decimal::Decimal;
     #[test]
     fn test_serialize_msg() {
         let msg: Msg = Msg::Test("TestMsg1".to_string());
         let s = to_string(&msg).expect("Unable to serialize");
         let v: Value = from_str(&s).expect("Unable to deserialize");
         assert_eq!(v, json!({"type": "deep_space/Test", "value": "TestMsg1"}));
+    }
+    #[test]
+    fn test_has_prevote_msg() {
+        let vote: Msg = Msg::MsgExchangeRateVote(MsgExchangeRateVote{
+            exchange_rate: Decimal::new(-100,2),
+            denom:"test".to_string(),
+            salt:"hello_world".to_string(),
+            feeder: Address::from_bech32("terra1grgelyng2v6v3t8z87wu3sxgt9m5s03x259evd").unwrap(),
+            validator: Address::from_bech32("terravaloper1grgelyng2v6v3t8z87wu3sxgt9m5s03x2mfyu7").unwrap(),
+
+        });
+
+        let mut hash_str: String = "".to_string();
+        if let Msg::MsgExchangeRateVote(x) =vote{
+            hash_str = x.generate_vote_hash();
+        }
+        assert_ne!(hash_str,"");
     }
 }
