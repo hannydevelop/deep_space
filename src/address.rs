@@ -13,13 +13,13 @@ pub struct Address([u8; 20]);
 
 /// A Cosmos Hub Validator Operator address that's derived from a given PublicKey
 #[derive(Default, Debug, PartialEq, Eq, Copy, Clone)]
-pub struct CosmosValidatorOperatorAddress(Address);
+pub struct CosmosValidatorOperatorAddress(pub Address);
 /// A Terra address that's derived from a given PublicKey
 #[derive(Default, Debug, PartialEq, Eq, Copy, Clone)]
-pub struct TerraAddress(Address);
+pub struct TerraAddress(pub Address);
 /// A Terra Validator Operator address that's derived from a given PublicKey
 #[derive(Default, Debug, PartialEq, Eq, Copy, Clone)]
-pub struct TerraValidatorOperatorAddress(Address);
+pub struct TerraValidatorOperatorAddress(pub Address);
 
 impl Address {
     /// Create an address from byte array.

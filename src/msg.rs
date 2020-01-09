@@ -103,7 +103,7 @@ impl Msg {
 
 #[cfg(test)]
 mod tests {
-    use super::{Address, Msg, MsgExchangeRateVote};
+    use super::{Address, TerraAddress, TerraValidatorOperatorAddress, Msg, MsgExchangeRateVote};
     use rust_decimal::Decimal;
     use serde_json::{from_str, json, to_string, Value};
     #[test]
@@ -119,9 +119,9 @@ mod tests {
             exchange_rate: Decimal::new(-100, 2),
             denom: "test".to_string(),
             salt: "hello_world".to_string(),
-            feeder: Address::from_bech32("terra1grgelyng2v6v3t8z87wu3sxgt9m5s03x259evd").unwrap(),
-            validator: Address::from_bech32("terravaloper1grgelyng2v6v3t8z87wu3sxgt9m5s03x2mfyu7")
-                .unwrap(),
+            feeder: TerraAddress{0:Address::from_bech32("terra1grgelyng2v6v3t8z87wu3sxgt9m5s03x259evd").unwrap()},
+            validator: TerraValidatorOperatorAddress{0:Address::from_bech32("terravaloper1grgelyng2v6v3t8z87wu3sxgt9m5s03x2mfyu7")
+                .unwrap()},
         });
 
         let mut hash_str: String = "".to_string();
