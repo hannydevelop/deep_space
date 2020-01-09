@@ -12,10 +12,13 @@ use subtle_encoding::bech32::{self};
 pub struct Address([u8; 20]);
 
 /// A Cosmos Hub Validator Operator address that's derived from a given PublicKey
+#[derive(Default, Debug, PartialEq, Eq, Copy, Clone)]
 pub struct CosmosValidatorOperatorAddress(Address);
 /// A Terra address that's derived from a given PublicKey
+#[derive(Default, Debug, PartialEq, Eq, Copy, Clone)]
 pub struct TerraAddress(Address);
 /// A Terra Validator Operator address that's derived from a given PublicKey
+#[derive(Default, Debug, PartialEq, Eq, Copy, Clone)]
 pub struct TerraValidatorOperatorAddress(Address);
 
 impl Address {
