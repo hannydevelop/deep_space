@@ -58,6 +58,6 @@ pub enum CosmosSDKTx{
     CosmosStdTx(StdTx),
     /// Terra Cosmos SDK transaction interface
     #[serde(rename = "core/StdTx")]
-    Core(StdTx),
+    Terra(StdTx),
 
 }
