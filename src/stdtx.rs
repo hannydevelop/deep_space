@@ -14,6 +14,7 @@ pub struct TxSignature {
     signature: Sig,
 }
 
+/// New Type Wrapper around the Signatuory type for customer serialization
 pub struct Sig(FixedSignature<Secp256k1>);
 
 impl fmt::Debug for TxSignature {
