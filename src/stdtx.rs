@@ -19,7 +19,7 @@ pub struct TxSignature {
 /// Pub Key enum wrapper for amino
 #[derive(Serialize)]
 #[serde(tag = "type", content = "value")]
-pub enum PubKey{
+pub enum PubKey {
     /// Secp256k1 key
     #[serde(rename = "tendermint/PubKeySecp256k1")]
     SecpKey(SecpKey),
@@ -28,7 +28,7 @@ pub enum PubKey{
 /// New Type wrapper to implement custom serialization
 pub struct SecpKey(pub PublicKey<Secp256k1>);
 
-impl Serialize for SecpKey{
+impl Serialize for SecpKey {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -36,7 +36,6 @@ impl Serialize for SecpKey{
         serializer.serialize_str(&base64::encode(&self.0))
     }
 }
-
 
 /// New Type Wrapper around the Signatuory type for customer serialization
 pub struct Sig(pub FixedSignature<Secp256k1>);
