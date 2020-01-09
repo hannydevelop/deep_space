@@ -53,7 +53,11 @@ pub struct StdTx {
 #[derive(Serialize, Debug)]
 #[serde(tag = "type", content = "value")]
 pub enum CosmosSDKTx{
-    /// Standard Cosmos SDK transcaction interface
-    #[serde(rename = "cosmos-sdk/MsgSend")]
-    StdTx(StdTx),
+    /// Standard Cosmos SDK transaction interface
+    #[serde(rename = "cosmos-sdk/StdTx")]
+    CosmosStdTx(StdTx),
+    /// Terra Cosmos SDK transaction interface
+    #[serde(rename = "core/StdTx")]
+    Core(StdTx),
+
 }
