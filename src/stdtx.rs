@@ -30,7 +30,7 @@ impl Serialize for TxSignature {
     {
         match self {
             TxSignature::StandardSDKSignature(sig) => {
-                serializer.serialize_str(&base64::encode(sig))
+                serializer.serialize_str(format!("\"signature\":{}", &base64::encode(sig)).as_ref())
             }
         }
     }
@@ -47,4 +47,13 @@ pub struct StdTx {
     pub memo: String,
     /// Signatures
     pub signatures: Vec<TxSignature>,
+}
+
+/// Cosmos SDk transaction wrapper
+#[derive(Serialize, Debug)]
+#[serde(tag = "type", content = "value")]
+pub enum CosmosSDKTx{
+    /// Standard Cosmos SDK transcaction interface
+    #[serde(rename = "cosmos-sdk/MsgSend")]
+    StdTx(StdTx),
 }
