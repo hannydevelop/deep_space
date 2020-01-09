@@ -11,7 +11,7 @@ use std::fmt;
 #[derive(Serialize)]
 pub struct TxSignature {
     /// Standard Secp256k1 ECDSA signature
-    signature: Sig,
+    pub signature: Sig,
 }
 
 /// New Type Wrapper around the Signatuory type for customer serialization
