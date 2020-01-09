@@ -4,15 +4,39 @@
 use crate::msg::Msg;
 use crate::stdfee::StdFee;
 use serde::{Serialize, Serializer};
-use signatory::ecdsa::{curve::Secp256k1, FixedSignature};
+use signatory::ecdsa::{curve::Secp256k1, FixedSignature, PublicKey};
 use std::fmt;
 
 /// Signatures on the transactions
 #[derive(Serialize)]
 pub struct TxSignature {
+    /// Optional Public key on a singature
+    pub pub_key: Option<PubKey>,
     /// Standard Secp256k1 ECDSA signature
     pub signature: Sig,
 }
+
+/// Pub Key enum wrapper for amino
+#[derive(Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum PubKey{
+    /// Secp256k1 key
+    #[serde(rename = "tendermint/PubKeySecp256k1")]
+    SecpKey(SecpKey),
+}
+
+/// New Type wrapper to implement custom serialization
+pub struct SecpKey(pub PublicKey<Secp256k1>);
+
+impl Serialize for SecpKey{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&base64::encode(&self.0))
+    }
+}
+
 
 /// New Type Wrapper around the Signatuory type for customer serialization
 pub struct Sig(pub FixedSignature<Secp256k1>);
