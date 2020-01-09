@@ -8,31 +8,30 @@ use signatory::ecdsa::{curve::Secp256k1, FixedSignature};
 use std::fmt;
 
 /// Signatures on the transactions
-pub enum TxSignature {
+#[derive(Serialize)]
+pub struct TxSignature {
     /// Standard Secp256k1 ECDSA signature
-    StandardSDKSignature(FixedSignature<Secp256k1>),
+    signature: Sig,
 }
+
+struct Sig(FixedSignature<Secp256k1>);
 
 impl fmt::Debug for TxSignature {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            TxSignature::StandardSDKSignature(sig) => {
-                Ok(write!(f, "ECDSA Signature: {}", base64::encode(sig))?)
-            }
-        }
+        Ok(write!(
+            f,
+            "ECDSA Signature: {}",
+            base64::encode(&self.signature.0)
+        )?)
     }
 }
 
-impl Serialize for TxSignature {
+impl Serialize for Sig {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
-        match self {
-            TxSignature::StandardSDKSignature(sig) => {
-                serializer.serialize_str(format!("\"signature\":{}", &base64::encode(sig)).as_ref())
-            }
-        }
+        serializer.serialize_str(&base64::encode(&self.0))
     }
 }
 
@@ -52,12 +51,11 @@ pub struct StdTx {
 /// Cosmos SDk transaction wrapper
 #[derive(Serialize, Debug)]
 #[serde(tag = "type", content = "value")]
-pub enum CosmosSDKTx{
+pub enum CosmosSDKTx {
     /// Standard Cosmos SDK transaction interface
     #[serde(rename = "cosmos-sdk/StdTx")]
     CosmosStdTx(StdTx),
     /// Terra Cosmos SDK transaction interface
     #[serde(rename = "core/StdTx")]
     Terra(StdTx),
-
 }

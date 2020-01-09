@@ -7,9 +7,16 @@ use serde::Serializer;
 use std::fmt::{self, Display};
 use subtle_encoding::bech32::{self};
 
-/// An address that's derived from a given PublicKey
+/// A Cosmos Hub address that's derived from a given PublicKey
 #[derive(Default, Debug, PartialEq, Eq, Copy, Clone)]
 pub struct Address([u8; 20]);
+
+/// A Cosmos Hub Validator Operator address that's derived from a given PublicKey
+pub struct CosmosValidatorOperatorAddress(Address);
+/// A Terra address that's derived from a given PublicKey
+pub struct TerraAddress(Address);
+/// A Terra Validator Operator address that's derived from a given PublicKey
+pub struct TerraValidatorOperatorAddress(Address);
 
 impl Address {
     /// Create an address from byte array.
@@ -56,6 +63,42 @@ impl Serialize for Address {
         serializer.serialize_str(&s)
     }
 }
+
+impl Serialize for CosmosValidatorOperatorAddress {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        // Serialize address as a string with a default prefix for addresses
+        let s = self.0.to_bech32("cosmosvaloper");
+        serializer.serialize_str(&s)
+    }
+}
+
+impl Serialize for TerraAddress {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        // Serialize address as a string with a default prefix for addresses
+        let s = self.0.to_bech32("terra");
+        serializer.serialize_str(&s)
+    }
+}
+
+impl Serialize for TerraValidatorOperatorAddress {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        // Serialize address as a string with a default prefix for addresses
+        let s = self.0.to_bech32("terra");
+        serializer.serialize_str(&s)
+    }
+}
+
+
+
 
 #[test]
 fn test_bech32() {
