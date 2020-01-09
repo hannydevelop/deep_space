@@ -1,7 +1,7 @@
 //! Transaction MSGs for various comsos sdk chains
 //!
 
-use crate::address::Address;
+use crate::address::{Address, TerraAddress, TerraValidatorOperatorAddress};
 use crate::canonical_json::to_canonical_json;
 use crate::coin::Coin;
 use failure::Error;
@@ -30,9 +30,9 @@ pub struct MsgExchangeRateVote {
     /// Denom for Oracle Vote
     pub denom: String,
     /// Origin of the Feed Msg
-    pub feeder: Address,
+    pub feeder: TerraAddress,
     /// Validator voting on behalf of
-    pub validator: Address,
+    pub validator: TerraValidatorOperatorAddress,
 }
 
 impl MsgExchangeRateVote {
@@ -40,10 +40,7 @@ impl MsgExchangeRateVote {
     pub fn generate_vote_hash(&self) -> String {
         let data = format!(
             "{}:{}:{}:{}",
-            self.salt,
-            self.exchange_rate,
-            self.denom,
-            self.validator.to_bech32("terravaloper")
+            self.salt, self.exchange_rate, self.denom, self.validator,
         );
         //Tendermint truncated sha256
         let digest = Sha256::digest(data.as_bytes());
@@ -62,18 +59,18 @@ pub struct MsgExchangeRatePrevote {
     /// Denom to commit for
     pub denom: String,
     /// Origin Address for vote
-    pub feeder: Address,
+    pub feeder: TerraAddress,
     /// Validator voting on behalf of
-    pub validator: Address,
+    pub validator: TerraValidatorOperatorAddress,
 }
 
 /// Delegate Terra Oracle voting account to a new key
 #[derive(Serialize, Debug, Clone)]
 pub struct MsgDelegateFeedConsent {
     /// operator delegating voting authority
-    pub operator: Address,
+    pub operator: TerraValidatorOperatorAddress,
     /// key delegated to
-    pub feeder: Address,
+    pub feeder: TerraAddress,
 }
 
 /// Any arbitrary message

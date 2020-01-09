@@ -49,9 +49,28 @@ impl Address {
 
 impl Display for Address {
     fn fmt<'a>(&self, f: &mut fmt::Formatter<'a>) -> fmt::Result {
-        for &byte in self.0.iter() {
-            write!(f, "{:02X}", byte)?;
-        }
+        write!(f, "{}", self.to_bech32("cosmos"))?;
+        Ok(())
+    }
+}
+
+impl Display for TerraAddress {
+    fn fmt<'a>(&self, f: &mut fmt::Formatter<'a>) -> fmt::Result {
+        write!(f, "{}", self.0.to_bech32("terra"))?;
+        Ok(())
+    }
+}
+
+impl Display for TerraValidatorOperatorAddress {
+    fn fmt<'a>(&self, f: &mut fmt::Formatter<'a>) -> fmt::Result {
+        write!(f, "{}", self.0.to_bech32("terravaloper"))?;
+        Ok(())
+    }
+}
+
+impl Display for CosmosValidatorOperatorAddress {
+    fn fmt<'a>(&self, f: &mut fmt::Formatter<'a>) -> fmt::Result {
+        write!(f, "{}", self.0.to_bech32("cosmosvaloper"))?;
         Ok(())
     }
 }
@@ -99,9 +118,6 @@ impl Serialize for TerraValidatorOperatorAddress {
         serializer.serialize_str(&s)
     }
 }
-
-
-
 
 #[test]
 fn test_bech32() {
