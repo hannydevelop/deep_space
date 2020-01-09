@@ -114,7 +114,7 @@ impl Serialize for TerraValidatorOperatorAddress {
         S: Serializer,
     {
         // Serialize address as a string with a default prefix for addresses
-        let s = self.0.to_bech32("terravaloper);
+        let s = self.0.to_bech32("terravaloper");
         serializer.serialize_str(&s)
     }
 }
