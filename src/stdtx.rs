@@ -14,7 +14,7 @@ pub struct TxSignature {
     signature: Sig,
 }
 
-struct Sig(FixedSignature<Secp256k1>);
+pub struct Sig(FixedSignature<Secp256k1>);
 
 impl fmt::Debug for TxSignature {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
