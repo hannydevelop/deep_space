@@ -5,7 +5,7 @@ use crate::address::{Address, TerraAddress, TerraValidatorOperatorAddress};
 use crate::canonical_json::to_canonical_json;
 use crate::coin::Coin;
 use failure::Error;
-// use rust_decimal::Decimal;
+use rust_decimal::Decimal;
 use serde::Serialize;
 use sha2::{digest::Digest, Sha256};
 use subtle_encoding::hex;
@@ -24,7 +24,7 @@ pub struct SendMsg {
 #[derive(Serialize, Debug, Clone)]
 pub struct MsgExchangeRateVote {
     /// Exchange rate voted on. Negative values are an abstain vote.
-    pub exchange_rate: String,
+    pub exchange_rate: Decimal,
     /// Salt for commit reveal prootocol
     pub salt: String,
     /// Denom for Oracle Vote
@@ -104,9 +104,9 @@ impl Msg {
 #[cfg(test)]
 mod tests {
     use super::{Address, Msg, MsgExchangeRateVote, TerraAddress, TerraValidatorOperatorAddress};
-    // use rust_decimal::Decimal;
+    use rust_decimal::Decimal;
     use serde_json::{from_str, json, to_string, Value};
-    // use std::str::FromStr;
+    use std::str::FromStr;
 
     #[test]
     fn test_serialize_msg() {
@@ -118,7 +118,7 @@ mod tests {
     #[test]
     fn test_has_prevote_msg() {
         let vote: Msg = Msg::MsgExchangeRateVote(MsgExchangeRateVote {
-            exchange_rate:"-1.000000000000000000".to_string(),
+            exchange_rate: Decimal::from_str("-1.000000000000000000").unwrap(),
             denom: "test".to_string(),
             salt: "hello_world".to_string(),
             feeder: TerraAddress {
