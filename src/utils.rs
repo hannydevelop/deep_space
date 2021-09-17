@@ -131,6 +131,9 @@ pub fn check_tx_response(input: &TxResponse) -> bool {
             return false;
         }
     }
+    if input.code != 0 {
+        return false;
+    }
 
     true
 }
